@@ -1,0 +1,107 @@
+// ---------------------------------------------------
+// keyword approach
+// ---------------------------------------------------
+
+// data types
+* number
+* text or string
+* gui element ???
+* location ???
+* date, time (later version) 
+
+// keyword types
+
+* scriped keyword (low level keyword)
+* execution keyword (mid level keyword)
+* testcase (high level keyword)
+
+
+* continer / compound keyword
+
+// ---------------------------------------------------
+// keyword examples
+// ---------------------------------------------------
+
+// lowlevel keyword or scriped keyword
+keyword<lowlevel> Click on Button {
+  property inout location as Location
+  property button as enumeration(LEFT, MIDDLE, RIGHT)
+  property out result // default datatype is STRING
+
+  implement as javascript {
+    // impelement method
+  }
+}
+
+keyword<lowlevel> Click on Button {
+  property in location as Location
+  property inout button as enumeration(LEFT, MIDDLE, RIGHT)
+  property out result // default datatype is STRING
+  
+  implement as java => com.testing.KeywordClick
+}
+
+// midlevel
+keyword<midlevel> Login on Webmeter Portal {
+	description '''
+		Diese Keyword erwartet, dass der Test auf der Startseite der Anwendung ist. 
+		Zu Beginn wird auf die Login-Seite navigiert. Danach werden die Felder Username 
+		und Passwort mit den Werten aus den Parameters befühlt. Am Ende wird auf den Login 
+		Button geklickt und überpüft ob der Login erfolgreich war.
+	'''
+	property in username
+	property in password
+	variable tmpvar
+	
+	Click on Button( :TestWebApp.Goto Login Page)
+	Type Text( :TestWebApp.Login.Username, $username)
+	Type Text( :TestWebApp.Login.Password, $password)
+	Click on Button( TestWebApp.Login.Login)
+	
+	Check Element Exists (:TestWebApp.ToolBar)
+}
+
+keyword<midlevel> Demo Keyword {
+	variable i as number //Is this necessary
+	variable j as number
+	variable x as number
+	
+	Define Variable("i", number)
+	Define Variable("j", number)
+	
+	Set ($x , (i + j) - 2 )
+	Set ($x , :TestWebApp.Dashboard.Panels.Count)
+	
+	//
+	// Bound keyword
+	//
+	
+	IF ($x == $i) {
+		Set($x, $j)
+	}	
+	
+	IF ($x == $i, If Condition DeMo KeYwOrD)
+	
+	Range Loop (0, 10) { 
+		Set($x, $i)
+		Type Text(:TestWebApp.Dashboard.Search, $i + " Project)
+		Click Button(:*.Dashboard.Search.Lets Go)
+	}
+	
+	Range Loop (0, 10, For Condition Test);
+	
+	Element Loop(:TestWebApp.Dashboard.Panels) {
+		Click Button( $panel.Titlebar.Close)
+	}	
+}
+
+// highlevel keyword or testcase
+testcase SC - New Project Test {
+	description '''
+	  Create a new SC project.
+	'''
+
+	Login in SC with user("adler", "secret")
+	Goto SC Administration Section ("Projects")
+	Create new SC Project ("Project 0001");
+}

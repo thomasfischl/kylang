@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.github.thomasfischl.kylang/src-gen" editDirectory="/com.github.thomasfischl.kylang.edit/src"
+    editorDirectory="/com.github.thomasfischl.kylang.editor/src" modelPluginID="com.github.thomasfischl.kylang"
+    forceOverwrite="true" modelName="TestLang" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="com.github.thomasfischl.kylang.edit"
+    editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.9">
+  <genPackages prefix="TestLang" basePackage="com.github.thomasfischl.kylang.test"
+      disposableProviderFactory="true" fileExtensions="kytest" ecorePackage="TestLang.ecore#/">
+    <genClasses ecoreClass="TestLang.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Model/keywords"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordDecl">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordDecl/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/script"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/keywordlist"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordList/children"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordCall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/keyword"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/parameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/keywordlist"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordScript">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordScript/scriptType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordScript/class"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//Expr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Expr/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//OrExpr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//OrExpr/exprs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//OrExpr/opt"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//AndExpr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//AndExpr/expr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//AndExpr/opt"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//RelExpr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//RelExpr/expr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//RelExpr/opt"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//SimpleExpr">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//SimpleExpr/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//Term">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Term/expr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Term/opt"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//NotFact">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//NotFact/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//Fact">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/bool"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/number"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/string"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Fact/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//PropertyDecl">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//PropertyDecl/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//PropertyDecl/values"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

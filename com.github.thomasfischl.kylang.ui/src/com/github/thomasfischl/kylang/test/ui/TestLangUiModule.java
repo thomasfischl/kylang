@@ -8,8 +8,17 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * Use this class to register components to be used within the IDE.
  */
-public class TestLangUiModule extends com.github.thomasfischl.kylang.test.ui.AbstractTestLangUiModule {
+public class TestLangUiModule extends
+		com.github.thomasfischl.kylang.test.ui.AbstractTestLangUiModule {
 	public TestLangUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	public Class<? extends org.eclipse.xtext.ui.editor.outline.IOutlineTreeProvider> bindIOutlineTreeProvider() {
+		return com.github.thomasfischl.kylang.test.ui.outline.TestLangOutlineTreeProvider.class;
+	}
+
+	public Class<? extends org.eclipse.xtext.ui.editor.outline.impl.IOutlineTreeStructureProvider> bindIOutlineTreeStructureProvider() {
+		return com.github.thomasfischl.kylang.test.ui.outline.TestLangOutlineTreeProvider.class;
 	}
 }

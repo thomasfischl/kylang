@@ -32,9 +32,17 @@ public class TestLangOutlineTreeProvider extends DefaultOutlineTreeProvider {
     }
   }
 
-  protected boolean _isLeaf(KeywordCall obj) {
-    return true;
+  protected void _createChildren(EObjectNode parentNode, KeywordCall model) {
+    if (model.getKeywordlist() != null) {
+      for (KeywordCall element : model.getKeywordlist().getChildren()) {
+        createNode(parentNode, element);
+      }
+    }
   }
+
+  // protected boolean _isLeaf(KeywordCall obj) {
+  // return true;
+  // }
 
   public Object _text(KeywordDecl obj) {
     // List<String> props = new ArrayList<>();
@@ -47,4 +55,7 @@ public class TestLangOutlineTreeProvider extends DefaultOutlineTreeProvider {
     return obj.getName();
   }
 
+  public Object _text(KeywordCall obj) {
+    return obj.getName();
+  }
 }

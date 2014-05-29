@@ -16,22 +16,26 @@ Model:
 
 KeywordDecl:
 	'keyword' 
-	//('<' metatype=ID '>')? 
+	('<' metatype=IDEXT '>')? 
 	name=IDEXT
 	'{'
-		//TODO description
+		(desc=Description)?
 		(properties+=PropertyDecl)*
 		(script=KeywordScript|keywordlist=KeywordList)		
 	'}'
 	;
-	
-	
+
 KeywordList:
 	(children+=KeywordCall)*	
 ;
 
 KeywordCall:
-	keyword=IDEXT '(' parameters+=Expr (',' parameters+=Expr )* ')'
+	name=IDEXT 
+	( 
+		'(' 
+			(parameters+=Expr (',' parameters+=Expr )* )? 
+		')'
+	)?
 	
 	(
 		'{'
@@ -43,6 +47,10 @@ KeywordCall:
 
 KeywordScript:
 	'implement' 'as' scriptType=IDEXT '=>' class=STRING 
+;
+
+Description:
+	'description' text=ML_STRING	
 ;
 
 Expr:
@@ -110,30 +118,36 @@ PropertyDecl:
 //
 //terminal ANY_OTHER: .;
 
+terminal fragment IDEXT_CHARS:
+	'a'..'z' | 'A'..'Z' | '0'..'9' | '$' | "'"
+;
 
 terminal fragment IDEXT_SENTENCE:
-	('A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')* (' ' ('a'..'z' | 'A'..'Z' | '0'..'9' | ' ')* )?
+	('A'..'Z') IDEXT_CHARS* (' ' ( IDEXT_CHARS | ' ')* )?
 ;
 
 terminal fragment IDEXT_IDENTIFIER:
-	('a'..'z') ('a'..'z' | 'A'..'Z' | '0'..'9')*
+	('a'..'z') IDEXT_CHARS*
 ;
 
 terminal IDEXT:
 	(
 		IDEXT_SENTENCE | 
 		IDEXT_IDENTIFIER
-	) ('_')? ;
+	) ('_')? 
+;
 
 terminal STRING	: 
-			'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"'
-		; 	
+	'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"'
+; 	
 
-terminal NUMBER returns ecore::EInt: ('0'..'9')+;
+terminal ML_STRING  : "'''" -> "'''";
+
+terminal INT returns ecore::EInt      : ('0'..'9')+;
+terminal NUMBER returns ecore::EDouble: INT ('.' INT)?;
 	
 terminal ML_COMMENT	: '/*' -> '*/';
-terminal SL_COMMENT 	: '//' !('\n'|'\r')* ('\r'? '\n')?;
-
+terminal SL_COMMENT : '//' !('\n'|'\r')* ('\r'? '\n')?;
 terminal WS			: (' '|'\t'|'\r'|'\n')+;
 
 terminal ANY_OTHER: .;

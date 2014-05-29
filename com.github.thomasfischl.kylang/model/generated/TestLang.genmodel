@@ -11,7 +11,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Model/keywords"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordDecl">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordDecl/metatype"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordDecl/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/desc"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/properties"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/script"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordDecl/keywordlist"/>
@@ -20,13 +22,16 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordList/children"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordCall">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/keyword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/parameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/keywordlist"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordScript">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordScript/scriptType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordScript/class"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//Description">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Description/text"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//Expr">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Expr/expr"/>

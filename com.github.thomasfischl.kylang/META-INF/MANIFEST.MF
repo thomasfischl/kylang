@@ -31,5 +31,6 @@ Export-Package: com.github.thomasfischl.kylang.test,
  com.github.thomasfischl.kylang.test.validation,
  com.github.thomasfischl.kylang.test.scoping,
  com.github.thomasfischl.kylang.test.generator,
- com.github.thomasfischl.kylang.test.formatting
+ com.github.thomasfischl.kylang.test.formatting,
+ com.github.thomasfischl.kylang.util
 

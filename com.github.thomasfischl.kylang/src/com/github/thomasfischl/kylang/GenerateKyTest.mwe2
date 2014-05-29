@@ -89,7 +89,7 @@ Workflow {
 			fragment = generator.GeneratorFragment auto-inject {}
 
 			// formatter API
-			fragment = formatting.FormatterFragment auto-inject {}
+			// fragment = formatting.FormatterFragment auto-inject {}
 
 			// labeling API
 			fragment = labeling.LabelProviderFragment auto-inject {}
@@ -99,10 +99,10 @@ Workflow {
 			// fragment = outline.QuickOutlineFragment auto-inject {}
 
 			// quickfix API
-			fragment = quickfix.QuickfixProviderFragment auto-inject {}
+			// fragment = quickfix.QuickfixProviderFragment auto-inject {}
 
 			// content assist API
-			fragment = contentAssist.ContentAssistFragment auto-inject {}
+			fragment = contentAssist.JavaBasedContentAssistFragment auto-inject {}
 
 			// generates a more lightweight Antlr parser and lexer tailored for content assist
 			fragment = parser.antlr.XtextAntlrUiGeneratorFragment auto-inject {}

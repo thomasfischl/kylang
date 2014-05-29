@@ -21,6 +21,11 @@ public class TestLangUiModule extends com.github.thomasfischl.kylang.test.ui.Abs
     return com.github.thomasfischl.kylang.test.ui.outline.TestLangOutlineTreeProvider.class;
   }
 
+  @Override
+  public Class<? extends org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider> bindIssueResolutionProvider() {
+    return com.github.thomasfischl.kylang.test.ui.quickfix.TestLangQuickfixProvider.class;
+  }
+
   // public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
   // return TestLangHighlightingConfiguration.class;
   // }

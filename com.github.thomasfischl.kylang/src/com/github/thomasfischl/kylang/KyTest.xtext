@@ -16,7 +16,7 @@ Model:
 
 KeywordDecl:
 	'keyword' 
-	('<' metatype=IDEXT '>')? 
+	('<' metatype=KeywordMetatype '>')? 
 	name=IDEXT
 	'{'
 		(desc=Description)?
@@ -32,13 +32,13 @@ KeywordList:
 KeywordCall:
 	name=IDEXT 
 	( 
-		'(' 
+		hasParameters?='(' 
 			(parameters+=Expr (',' parameters+=Expr )* )? 
 		')'
 	)?
 	
 	(
-		'{'
+		hasKeywordList?='{'
 			keywordlist=KeywordList
 		'}'
 		
@@ -46,7 +46,7 @@ KeywordCall:
 ;
 
 KeywordScript:
-	'implement' 'as' scriptType=IDEXT '=>' class=STRING 
+	'implement' 'as' scriptType=ScriptType '=>' class=STRING 
 ;
 
 Description:
@@ -96,6 +96,14 @@ PropertyDecl:
 		('number' | 'string' | 'enumeration' '(' values+=IDEXT (',' values+=IDEXT)+ ')')
 	)?;
 
+
+enum KeywordMetatype:
+	TESTCASE='testcase' | SCRIPTED='scripted'
+;
+
+enum ScriptType:
+	JAVA='java'
+;
 
 /* ----------------------------------------------- */
 /*                lexer                            */

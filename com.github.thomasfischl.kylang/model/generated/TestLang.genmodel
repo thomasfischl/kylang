@@ -7,6 +7,13 @@
     editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.9">
   <genPackages prefix="TestLang" basePackage="com.github.thomasfischl.kylang.test"
       disposableProviderFactory="true" fileExtensions="kytest" ecorePackage="TestLang.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="TestLang.ecore#//KeywordMetatype">
+      <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//KeywordMetatype/TESTCASE"/>
+      <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//KeywordMetatype/SCRIPTED"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="TestLang.ecore#//ScriptType">
+      <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//ScriptType/JAVA"/>
+    </genEnums>
     <genClasses ecoreClass="TestLang.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Model/keywords"/>
     </genClasses>
@@ -23,7 +30,9 @@
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordCall">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/hasParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/hasKeywordList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/keywordlist"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordScript">

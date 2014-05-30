@@ -71,6 +71,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/bool"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/number"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/string"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Fact/ident"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Fact/expr"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//PropertyDecl">

@@ -26,24 +26,23 @@ KeywordDecl:
 	;
 
 KeywordList:
-	(children+=KeywordCall)*	
+	(children+=KeywordCall)+	
 ;
 
 KeywordCall:
 	name=IDEXT 
-	( 
-		hasParameters?='(' 
-			(parameters+=Expr (',' parameters+=Expr )* )? 
-		')'
-	)?
-	
-	(
-		hasKeywordList?='{'
-			keywordlist=KeywordList
-		'}'
-		
-	)?	
+	(parameters=KeywordCallParameter)?
+	(keywordList=KeywordCallKeywordList)?	
 ;
+
+KeywordCallParameter:
+	'(' parameters+=Expr (',' parameters+=Expr )* ')'
+;
+
+KeywordCallKeywordList:
+	'{' keywordlist=KeywordList '}'
+;
+
 
 KeywordScript:
 	'implement' 'as' scriptType=ScriptType '=>' class=STRING 

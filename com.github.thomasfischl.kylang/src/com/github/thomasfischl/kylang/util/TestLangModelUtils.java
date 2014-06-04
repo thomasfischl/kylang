@@ -62,7 +62,7 @@ public class TestLangModelUtils {
   }
 
   public static boolean isInlineKeyword(KeywordCall keyword) {
-    return keyword.isHasKeywordList() && !keyword.isHasParameters();
+    return keyword.getKeywordList() != null && keyword.getParameters() == null;
   }
 
   public static boolean isScriptedKeyword(KeywordDecl keyword) {

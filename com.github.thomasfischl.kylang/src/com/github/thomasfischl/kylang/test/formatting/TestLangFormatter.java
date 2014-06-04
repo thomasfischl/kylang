@@ -45,12 +45,12 @@ public class TestLangFormatter extends AbstractDeclarativeFormatter {
 
     // KeywordCall
     c.setLinewrap().after(f.getKeywordCallRule());
-    c.setIndentationIncrement().after(f.getKeywordCallAccess().getHasKeywordListLeftCurlyBracketKeyword_2_0_0());
-    c.setIndentationDecrement().before(f.getKeywordCallAccess().getRightCurlyBracketKeyword_2_2());
+    c.setIndentationIncrement().after(f.getKeywordCallKeywordListAccess().getLeftCurlyBracketKeyword_0());
+    c.setIndentationDecrement().before(f.getKeywordCallKeywordListAccess().getRightCurlyBracketKeyword_2());
 
-    c.setNoSpace().before(f.getKeywordCallAccess().getHasKeywordListLeftCurlyBracketKeyword_2_0_0());
-    c.setLinewrap().after(f.getKeywordCallAccess().getHasKeywordListLeftCurlyBracketKeyword_2_0_0());
-    c.setLinewrap().after(f.getKeywordCallAccess().getRightCurlyBracketKeyword_2_2());
+    c.setNoSpace().before(f.getKeywordCallKeywordListAccess().getLeftCurlyBracketKeyword_0());
+    c.setLinewrap().after(f.getKeywordCallKeywordListAccess().getLeftCurlyBracketKeyword_0());
+    c.setLinewrap().after(f.getKeywordCallKeywordListAccess().getRightCurlyBracketKeyword_2());
 
   }
 }

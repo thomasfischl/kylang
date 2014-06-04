@@ -33,8 +33,8 @@ public class TestLangOutlineTreeProvider extends DefaultOutlineTreeProvider {
   }
 
   protected void _createChildren(EObjectNode parentNode, KeywordCall model) {
-    if (model.getKeywordlist() != null) {
-      for (KeywordCall element : model.getKeywordlist().getChildren()) {
+    if (model.getKeywordList() != null && model.getKeywordList().getKeywordlist() != null) {
+      for (KeywordCall element : model.getKeywordList().getKeywordlist().getChildren()) {
         createNode(parentNode, element);
       }
     }

@@ -38,8 +38,8 @@ public class TestLangQuickfixProvider extends DefaultQuickfixProvider {
         keywordImpl.getScript().setScriptType(ScriptType.JAVA);
         keywordImpl.getScript().setClass("ImplementMeClass");
 
-        if (keywordCall.isHasParameters()) {
-          for (int i = 0; i < keywordCall.getParameters().size(); i++) {
+        if (keywordCall.getParameters() != null && keywordCall.getParameters().getParameters() != null) {
+          for (int i = 0; i < keywordCall.getParameters().getParameters().size(); i++) {
             PropertyDecl prop = TestLangFactory.eINSTANCE.createPropertyDecl();
             prop.setName("property" + (i + 1));
             keywordImpl.getProperties().add(prop);

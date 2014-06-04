@@ -1,5 +1,6 @@
 package com.github.thomasfischl.kylang.runtime;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 
@@ -19,14 +20,16 @@ public class KyLangScriptEngine extends AbstractScriptEngine {
 
   @Override
   public Object eval(String script, ScriptContext context) throws ScriptException {
-    KyLangRuntime runtime = KyLangRuntime.createRuntime();
-    runtime.parse(new StringReader(script));
-    return null;
+    return eval(new StringReader(script), context);
   }
 
   @Override
   public Object eval(Reader reader, ScriptContext context) throws ScriptException {
-    throw new IllegalStateException("Not implemented");
+    KyLangRuntime runtime = KyLangRuntime.createRuntime();
+    runtime.loadLibrary(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("control-structure.kytest")));
+    runtime.loadLibrary(reader);
+    runtime.executeAllTestcases();
+    return null;
   }
 
   @Override

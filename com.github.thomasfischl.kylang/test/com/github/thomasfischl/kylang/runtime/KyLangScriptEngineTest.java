@@ -1,5 +1,7 @@
 package com.github.thomasfischl.kylang.runtime;
 
+import java.io.InputStreamReader;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -8,7 +10,7 @@ import org.junit.Test;
 public class KyLangScriptEngineTest {
 
   @Test
-  public void simpleTest() throws ScriptException {
+  public void simpleStringTest() throws ScriptException {
 
     String source = "";
 
@@ -19,6 +21,13 @@ public class KyLangScriptEngineTest {
     KyLangScriptEngineFactory factory = new KyLangScriptEngineFactory();
     ScriptEngine engine = factory.getScriptEngine();
     engine.eval(source);
+  }
+
+  @Test
+  public void simpleFileTest() throws ScriptException {
+    KyLangScriptEngineFactory factory = new KyLangScriptEngineFactory();
+    ScriptEngine engine = factory.getScriptEngine();
+    engine.eval(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("simple-test.kytest")));
   }
 
 }

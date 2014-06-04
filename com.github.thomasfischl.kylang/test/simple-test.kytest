@@ -1,0 +1,18 @@
+keyword<testcase> Simple Test Case for KyTest{
+	property usernme
+	property password
+	
+	Do some stuff first
+	Do another stuff
+	Inline Keyword {
+		Do some realy cool stuff		
+	}
+}
+
+keyword<scripted> Do some stuff first{
+	implement as java => "ImplementMeClass"
+}
+
+keyword<scripted> Do another stuff{
+	implement as java => "ImplementMeClass"
+}

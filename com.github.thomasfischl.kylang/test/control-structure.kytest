@@ -1,0 +1,26 @@
+keyword<scripted> if{
+	property condition as boolean
+
+	implement as java => ""
+}
+
+keyword<scripted> for{
+	property init
+	property from
+	property to
+
+	implement as java => ""
+}
+
+keyword<scripted> set{
+	property name
+	property value
+
+	implement as java => ""
+}
+
+keyword<scripted> verify{
+	property condition as boolean
+
+	implement as java => ""
+}

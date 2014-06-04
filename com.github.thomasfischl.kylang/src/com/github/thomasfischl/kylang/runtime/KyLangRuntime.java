@@ -1,12 +1,11 @@
 package com.github.thomasfischl.kylang.runtime;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import javax.script.ScriptException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.parser.IParseResult;
@@ -19,6 +18,7 @@ import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
 import com.github.thomasfischl.kylang.test.testLang.Model;
 import com.github.thomasfischl.kylang.test.testLang.TestLangFactory;
 import com.github.thomasfischl.kylang.util.TestLangModelUtils;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -44,7 +44,33 @@ public class KyLangRuntime {
     reporter = new KyLangReporter();
   }
 
-  public void parse(Reader reader) throws ScriptException {
+  // public void parse(Reader reader) throws ScriptException {
+  // IParseResult result = parser.parse(reader);
+  // if (result.hasSyntaxErrors()) {
+  // throw new ParseException("Provided input contains syntax errors.");
+  // }
+  //
+  // if (result.getRootASTElement() instanceof Model) {
+  // System.out.println("Successful loaded model.");
+  // Model model = (Model) result.getRootASTElement();
+  //
+  // executeTestcase(model);
+  //
+  // } else {
+  // throw new ScriptException("Could not parse script.");
+  // }
+  //
+  // // List<Issue> list = validator.validate(result.getRootASTElement().eResource(), CheckMode.ALL, CancelIndicator.NullImpl);
+  // // if (!list.isEmpty()) {
+  // // for (Issue issue : list) {
+  // // System.err.println(issue);
+  // // }
+  // // return;
+  // // }
+  //
+  // }
+
+  public void loadLibrary(Reader reader) {
     IParseResult result = parser.parse(reader);
     if (result.hasSyntaxErrors()) {
       throw new ParseException("Provided input contains syntax errors.");
@@ -54,27 +80,19 @@ public class KyLangRuntime {
       System.out.println("Successful loaded model.");
       Model model = (Model) result.getRootASTElement();
 
-      executeTestcase(model);
-
-    } else {
-      throw new ScriptException("Could not parse script.");
+      EList<KeywordDecl> keywords = model.getKeywords();
+      System.out.println("Loading " + keywords.size() + " keywords from library");
+      List<String> keywordNames = new ArrayList<>();
+      for (KeywordDecl keyword : keywords) {
+        keywordNames.add("\"" + TestLangModelUtils.normalizeKeyword(keyword.getName()) + "\"");
+        definedKeywords.put(TestLangModelUtils.normalizeKeyword(keyword.getName()), keyword);
+      }
+      System.out.println("Loaded Keywords (" + Joiner.on(",").join(keywordNames) + ")");
     }
-
-    // List<Issue> list = validator.validate(result.getRootASTElement().eResource(), CheckMode.ALL, CancelIndicator.NullImpl);
-    // if (!list.isEmpty()) {
-    // for (Issue issue : list) {
-    // System.err.println(issue);
-    // }
-    // return;
-    // }
-
   }
 
-  private void executeTestcase(Model model) {
-    EList<KeywordDecl> keywords = model.getKeywords();
-    loadDefinedKeywords(model);
-
-    for (KeywordDecl keyword : keywords) {
+  public void executeAllTestcases() {
+    for (KeywordDecl keyword : definedKeywords.values()) {
       if (TestLangModelUtils.isTestcaseKeyword(keyword)) {
         System.out.println("----------------------------------------------------------------");
         System.out.println("Execute Testcase '" + keyword.getName() + "'");
@@ -134,7 +152,7 @@ public class KyLangRuntime {
     if (TestLangModelUtils.isScriptedKeyword(keyword)) {
       // Execute a scripted keyword
       // TODO implement me
-      throw new NotImplemented();
+      System.out.println("Execute scripted keyword");
     } else {
       // Execute a container keyword
       if (keyword.getKeywordlist() != null) {
@@ -157,15 +175,6 @@ public class KyLangRuntime {
         reporter.reportUnkownKeyword(keyword.getName());
       }
     }
-  }
-
-  private Map<String, KeywordDecl> loadDefinedKeywords(Model model) {
-    EList<KeywordDecl> keywords = model.getKeywords();
-    definedKeywords.clear();
-    for (KeywordDecl keyword : keywords) {
-      definedKeywords.put(TestLangModelUtils.normalizeKeyword(keyword.getName()), keyword);
-    }
-    return definedKeywords;
   }
 
   private KeywordDecl getKeywordDefinition(String keywordName) {

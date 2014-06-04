@@ -93,7 +93,7 @@ PropertyDecl:
 	'property' ('in' | 'out' | 'inout')? name=IDEXT
 	(
 		'as'
-		('number' | 'string' | 'enumeration' '(' values+=IDEXT (',' values+=IDEXT)+ ')')
+		('number' | 'string' | 'boolean' | 'enumeration' '(' values+=IDEXT (',' values+=IDEXT)+ ')')
 	)?;
 
 

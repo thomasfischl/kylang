@@ -15,6 +15,7 @@ import org.eclipse.xtext.parser.ParseException;
 import com.github.thomasfischl.kylang.test.TestLangStandaloneSetupGenerated;
 import com.github.thomasfischl.kylang.test.testLang.KeywordCall;
 import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
+import com.github.thomasfischl.kylang.test.testLang.KeywordMetatype;
 import com.github.thomasfischl.kylang.test.testLang.Model;
 import com.github.thomasfischl.kylang.test.testLang.TestLangFactory;
 import com.github.thomasfischl.kylang.util.TestLangModelUtils;
@@ -164,11 +165,14 @@ public class KyLangRuntime {
   private void executeKeywordCall(KeywordCall keyword, Scope currScope) {
     if (TestLangModelUtils.isInlineKeyword(keyword)) {
       // Execute the keyword as inline keyword
-      // TODO implement me
-      throw new NotImplemented();
+      // Create a temporary keyword implementation for the inline keyword and push it on the execution stack
+      KeywordDecl keywordImpl = TestLangFactory.eINSTANCE.createKeywordDecl();
+      keywordImpl.setName(keyword.getName());
+      keywordImpl.setMetatype(KeywordMetatype.USERDEFINED);
+      keywordImpl.setKeywordlist(keyword.getKeywordList().getKeywordlist());
+      stack.push(new Scope(currScope, keywordImpl));
     } else {
       KeywordDecl keywordImpl = getKeywordDefinition(keyword.getName());
-
       if (keywordImpl != null) {
         stack.push(new Scope(currScope, keywordImpl));
       } else {

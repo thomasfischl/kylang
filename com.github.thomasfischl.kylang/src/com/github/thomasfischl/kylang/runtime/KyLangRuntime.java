@@ -189,11 +189,6 @@ public class KyLangRuntime {
     Injector injector = new TestLangStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
     return injector.getInstance(KyLangRuntime.class);
   }
-
-  // ------------------------------------------------------------------------
-  // inline class
-  // ------------------------------------------------------------------------
-
 }
 
 class Scope {

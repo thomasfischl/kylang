@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.github.thomasfischl.kylang.test.testLang.KeywordCall;
 import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
+import com.github.thomasfischl.kylang.test.testLang.KeywordMetatype;
 import com.github.thomasfischl.kylang.test.testLang.Model;
 
 public class TestLangModelUtils {
@@ -40,7 +41,13 @@ public class TestLangModelUtils {
     if (name == null) {
       return null;
     }
-    return name.trim();
+    name = name.trim();
+
+    if (name.endsWith("_")) {
+      name = name.substring(0, name.length() - 2);
+    }
+
+    return name;
   }
 
   public static KeywordDecl getKeywordDecl(EObject obj) {
@@ -55,7 +62,15 @@ public class TestLangModelUtils {
   }
 
   public static boolean isInlineKeyword(KeywordCall keyword) {
-    return !keyword.isHasParameters() && keyword.isHasKeywordList();
+    return keyword.isHasKeywordList() && !keyword.isHasParameters();
+  }
+
+  public static boolean isScriptedKeyword(KeywordDecl keyword) {
+    return keyword.getMetatype() == KeywordMetatype.SCRIPTED;
+  }
+
+  public static boolean isTestcaseKeyword(KeywordDecl keyword) {
+    return keyword.getMetatype() == KeywordMetatype.TESTCASE;
   }
 
 }

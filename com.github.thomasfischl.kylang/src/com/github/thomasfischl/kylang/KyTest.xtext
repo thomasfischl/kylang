@@ -99,7 +99,7 @@ PropertyDecl:
 
 
 enum KeywordMetatype:
-	TESTCASE='testcase' | SCRIPTED='scripted'
+	USERDEFINED='userdefined' | TESTCASE='testcase' | SCRIPTED='scripted'
 ;
 
 enum ScriptType:

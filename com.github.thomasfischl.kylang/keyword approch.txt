@@ -17,8 +17,6 @@
 
 
 * continer / compound keyword
-* inline keyword
-* anonym keyword
 
 // ---------------------------------------------------
 // keyword examples
@@ -48,8 +46,8 @@ keyword<midlevel> Login on Webmeter Portal {
 	description '''
 		Diese Keyword erwartet, dass der Test auf der Startseite der Anwendung ist. 
 		Zu Beginn wird auf die Login-Seite navigiert. Danach werden die Felder Username 
-		und Passwort mit den Werten aus den Parameters befï¿½hlt. Am Ende wird auf den Login 
-		Button geklickt und ï¿½berpï¿½ft ob der Login erfolgreich war.
+		und Passwort mit den Werten aus den Parameters befühlt. Am Ende wird auf den Login 
+		Button geklickt und überpüft ob der Login erfolgreich war.
 	'''
 	property in username
 	property in password

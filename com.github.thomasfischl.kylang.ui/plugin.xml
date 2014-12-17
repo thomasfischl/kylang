@@ -392,5 +392,24 @@
             extensions="kytest">
     </provider>
   </extension>
+  
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="com.github.thomasfischl.kylang.test.ui.launchers.KyLangLaunchConfigurationDelegate"
+           id="com.github.thomasfischl.kylang.test.ui.launchers.launchConfigurationType"
+           modes="run, debug"
+           name="KyLang Project"
+           public="true">
+     </launchConfigurationType>
+  </extension>
+  <extension
+        point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+     <launchConfigurationTabGroup
+           class="com.github.thomasfischl.kylang.test.ui.launchers.KyLangLaunchConfigurationTabGroup"
+           id="com.github.thomasfischl.kylang.test.ui.launchers.KyLangLaunchConfigurationTabGroup"
+           type="com.github.thomasfischl.kylang.test.ui.launchers.launchConfigurationType">
+     </launchConfigurationTabGroup>
+  </extension>
 
 </plugin>

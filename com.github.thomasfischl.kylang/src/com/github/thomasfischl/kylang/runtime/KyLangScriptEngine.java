@@ -14,8 +14,14 @@ public class KyLangScriptEngine extends AbstractScriptEngine {
 
   private ScriptEngineFactory factory;
 
+  private KyLangReporter reporter;
+
   public KyLangScriptEngine(ScriptEngineFactory factory) {
     this.factory = factory;
+  }
+
+  public void setReporter(KyLangReporter reporter) {
+    this.reporter = reporter;
   }
 
   @Override
@@ -26,6 +32,9 @@ public class KyLangScriptEngine extends AbstractScriptEngine {
   @Override
   public Object eval(Reader reader, ScriptContext context) throws ScriptException {
     KyLangRuntime runtime = KyLangRuntime.createRuntime();
+    if (reader != null) {
+      runtime.setReporter(reporter);
+    }
     runtime.loadLibrary(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("control-structure.kytest")));
     runtime.loadLibrary(reader);
     runtime.executeAllTestcases();

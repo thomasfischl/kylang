@@ -17,9 +17,17 @@ public class KyLangReporter {
   public void reportUnkownKeyword(String name) {
     report("??? unkown keyword: " + name);
   }
+  
+  public void log(String msg){
+    report(msg);
+  }
 
-  private void report(String msg) {
-    System.out.println("                         ".substring(0, indentation * 2) + msg);
+  protected void report(String msg) {
+    System.out.println(formatMessae(msg));
+  }
+
+  protected String formatMessae(String msg) {
+    return "                         ".substring(0, indentation * 2) + msg;
   }
 
 }

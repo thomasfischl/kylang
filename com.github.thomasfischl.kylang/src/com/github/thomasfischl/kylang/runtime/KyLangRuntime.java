@@ -26,12 +26,6 @@ import com.google.inject.Injector;
 
 public class KyLangRuntime {
 
-  // @Inject
-  // private Provider<ResourceSet> resourceSetProvider;
-
-  // @Inject
-  // private IResourceValidator validator;
-
   @Inject
   private IParser parser;
 
@@ -45,31 +39,9 @@ public class KyLangRuntime {
     reporter = new KyLangReporter();
   }
 
-  // public void parse(Reader reader) throws ScriptException {
-  // IParseResult result = parser.parse(reader);
-  // if (result.hasSyntaxErrors()) {
-  // throw new ParseException("Provided input contains syntax errors.");
-  // }
-  //
-  // if (result.getRootASTElement() instanceof Model) {
-  // System.out.println("Successful loaded model.");
-  // Model model = (Model) result.getRootASTElement();
-  //
-  // executeTestcase(model);
-  //
-  // } else {
-  // throw new ScriptException("Could not parse script.");
-  // }
-  //
-  // // List<Issue> list = validator.validate(result.getRootASTElement().eResource(), CheckMode.ALL, CancelIndicator.NullImpl);
-  // // if (!list.isEmpty()) {
-  // // for (Issue issue : list) {
-  // // System.err.println(issue);
-  // // }
-  // // return;
-  // // }
-  //
-  // }
+  public void setReporter(KyLangReporter reporter) {
+    this.reporter = reporter;
+  }
 
   public void loadLibrary(Reader reader) {
     IParseResult result = parser.parse(reader);
@@ -78,28 +50,28 @@ public class KyLangRuntime {
     }
 
     if (result.getRootASTElement() instanceof Model) {
-      System.out.println("Successful loaded model.");
+      reporter.log("Successful loaded model.");
       Model model = (Model) result.getRootASTElement();
 
       EList<KeywordDecl> keywords = model.getKeywords();
-      System.out.println("Loading " + keywords.size() + " keywords from library");
+      reporter.log("Loading " + keywords.size() + " keywords from library");
       List<String> keywordNames = new ArrayList<>();
       for (KeywordDecl keyword : keywords) {
         keywordNames.add("\"" + TestLangModelUtils.normalizeKeyword(keyword.getName()) + "\"");
         definedKeywords.put(TestLangModelUtils.normalizeKeyword(keyword.getName()), keyword);
       }
-      System.out.println("Loaded Keywords (" + Joiner.on(",").join(keywordNames) + ")");
+      reporter.log("Loaded Keywords (" + Joiner.on(",").join(keywordNames) + ")");
     }
   }
 
   public void executeAllTestcases() {
     for (KeywordDecl keyword : definedKeywords.values()) {
       if (TestLangModelUtils.isTestcaseKeyword(keyword)) {
-        System.out.println("----------------------------------------------------------------");
-        System.out.println("Execute Testcase '" + keyword.getName() + "'");
-        System.out.println("----------------------------------------------------------------");
+        reporter.log("----------------------------------------------------------------");
+        reporter.log("Execute Testcase '" + keyword.getName() + "'");
+        reporter.log("----------------------------------------------------------------");
         execute(keyword.getName());
-        System.out.println("----------------------------------------------------------------");
+        reporter.log("----------------------------------------------------------------");
       }
     }
   }
@@ -153,7 +125,7 @@ public class KyLangRuntime {
     if (TestLangModelUtils.isScriptedKeyword(keyword)) {
       // Execute a scripted keyword
       // TODO implement me
-      System.out.println("Execute scripted keyword");
+      reporter.log("Execute scripted keyword");
     } else {
       // Execute a container keyword
       if (keyword.getKeywordlist() != null) {

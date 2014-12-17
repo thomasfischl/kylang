@@ -4,10 +4,11 @@
     editorDirectory="/com.github.thomasfischl.kylang.editor/src" modelPluginID="com.github.thomasfischl.kylang"
     forceOverwrite="true" modelName="TestLang" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.github.thomasfischl.kylang.edit"
-    editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.9">
+    editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.10">
   <genPackages prefix="TestLang" basePackage="com.github.thomasfischl.kylang.test"
       disposableProviderFactory="true" fileExtensions="kytest" ecorePackage="TestLang.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="TestLang.ecore#//KeywordMetatype">
+      <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//KeywordMetatype/USERDEFINED"/>
       <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//KeywordMetatype/TESTCASE"/>
       <genEnumLiterals ecoreEnumLiteral="TestLang.ecore#//KeywordMetatype/SCRIPTED"/>
     </genEnums>
@@ -30,10 +31,14 @@
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordCall">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/hasParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/parameters"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordCall/hasKeywordList"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/keywordlist"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCall/keywordList"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordCallParameter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCallParameter/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="TestLang.ecore#//KeywordCallKeywordList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//KeywordCallKeywordList/keywordlist"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//KeywordScript">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//KeywordScript/scriptType"/>

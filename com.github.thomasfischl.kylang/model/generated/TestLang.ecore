@@ -24,10 +24,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="KeywordCall">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasParameters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="#//KeywordCallParameter"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keywordList" eType="#//KeywordCallKeywordList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeywordCallParameter">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//Expr" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasKeywordList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeywordCallKeywordList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="keywordlist" eType="#//KeywordList"
         containment="true"/>
   </eClassifiers>
@@ -86,8 +92,9 @@
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="KeywordMetatype">
-    <eLiterals name="TESTCASE" literal="testcase"/>
-    <eLiterals name="SCRIPTED" value="1" literal="scripted"/>
+    <eLiterals name="USERDEFINED" literal="userdefined"/>
+    <eLiterals name="TESTCASE" value="1" literal="testcase"/>
+    <eLiterals name="SCRIPTED" value="2" literal="scripted"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ScriptType">
     <eLiterals name="JAVA" literal="java"/>

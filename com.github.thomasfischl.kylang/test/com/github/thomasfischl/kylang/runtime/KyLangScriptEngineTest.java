@@ -30,4 +30,11 @@ public class KyLangScriptEngineTest {
     engine.eval(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("simple-test.kytest")));
   }
 
+  @Test
+  public void demoTest() throws ScriptException {
+	  KyLangScriptEngineFactory factory = new KyLangScriptEngineFactory();
+	  ScriptEngine engine = factory.getScriptEngine();
+	  engine.eval(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("demo.kytest")));
+  }
+
 }

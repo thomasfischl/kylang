@@ -1,0 +1,102 @@
+keyword<testcase> SC  New Project Test {
+	description '''
+	  Create a new SC project.
+	'''
+
+	Login on Webmeter Portal   ( "adler" , "secret" )
+
+	Goto SC Administration Section{
+		TODO 
+	}
+
+	Create new SC Project{
+		TODO 
+	}
+}
+
+keyword<userdefined> Login on Webmeter Portal {
+	description '''
+		Dieses Keyword erwartet, dass der Test auf der Startseite der Anwendung ist. 
+		Zu Beginn wird auf die Login-Seite navigiert. Danach werden die Felder Username 
+		und Passwort mit den Werten aus den Parameters befühlt. Am Ende wird auf den Login 
+		Button geklickt und überpüft ob der Login erfolgreich war.
+	'''
+
+	property in username
+	property in password
+
+	Click on Button   ( "TestWebApp.Goto Login Page" )
+	Type Text   ( "TestWebApp.Login.Username" , username )
+	Type Text   ( "TestWebApp.Login.Password" , password )
+	Click on Button   ( "TestWebApp.Login.Login" )
+	Check Element Exists    ( "TestWebApp.ToolBar" )
+}
+
+keyword<scripted> Click on Button {
+	property locator as string
+
+	implement as java => ""
+}
+
+keyword<scripted> Type Text {
+	property locator as string
+	property text as string
+
+	implement as java => ""
+}
+
+keyword<scripted> Check Element Exists {
+	property locator as string
+
+	implement as java => ""
+}
+
+keyword<scripted> TODO {
+	property locator as string
+
+	implement as java => ""
+}
+
+keyword<userdefined> Demo Keyword {
+	Define Variable   ( "i" , "number" )
+	Define Variable   ( "j" , "number" )
+	Set    ( x , ( i + j ) - 2 )
+	Set    ( x , "TestWebApp.Dashboard.Panels.Count" ) //
+	// Bound keyword
+	//
+	IF    ( x == i ){
+		Set   ( x , j )
+	} //	IF ($x == $i, If Condition DeMo KeYwOrD)
+	//	
+	//	Range Loop (0, 10) { 
+	//		Set($x, $i)
+	//		Type Text(:TestWebApp.Dashboard.Search, $i + " Project")
+	//		Click Button(:*.Dashboard.Search.Lets Go)
+	//	}
+	//	
+	//	Range Loop (0, 10, For Condition Test);
+	//	
+	//	Element Loop(:TestWebApp.Dashboard.Panels) {
+	//		Click Button( $panel.Titlebar.Close)
+	//	}	
+}
+
+keyword<scripted> Define Variable{
+	property property1
+	property property2
+
+	implement as java => "ImplementMeClass"
+}
+
+keyword<scripted> Set {
+	property property1
+	property property2
+
+	implement as java => "ImplementMeClass"
+}
+
+keyword<scripted> IF {
+	property property1
+
+	implement as java => "ImplementMeClass"
+}

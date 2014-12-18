@@ -1,0 +1,29 @@
+keyword<testcase> A User wants to create a new SC Test{
+	Login on the Webapplication with user("adler", "secret")
+	Goto SC Administration Section ("Projects")
+	Create new SC Project ("Project 0001")
+	Open Browser
+}
+
+keyword<userdefined> Login on the Webapplication with user{
+	property property1
+	property property2
+
+	Open Browser
+}
+
+keyword<scripted> Open Browser{
+	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.TestKeyword"
+}
+
+keyword<scripted> Goto SC Administration Section {
+	property property1
+
+	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.TestKeyword"
+}
+
+keyword<scripted> Create new SC Project {
+	property property1
+
+	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.TestKeyword"
+}

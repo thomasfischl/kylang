@@ -37,15 +37,15 @@ public class KyLangLaunchConfigurationDelegate extends LaunchConfigurationDelega
 
     IResource resource = LaunchHelper.GetResourceFromFile(ResourcesPlugin.getWorkspace().getRoot().getProject(projectname), programpath, false);
     if (resource instanceof IFile) {
+
+      KyLangReporterExtension reporter = new KyLangReporterExtension();
       try {
         KyLangScriptEngineFactory factory = new KyLangScriptEngineFactory();
         KyLangScriptEngine engine = (KyLangScriptEngine) factory.getScriptEngine();
-
-        engine.setReporter(new KyLangReporterExtension());
-
+        engine.setReporter(reporter);
         engine.eval(new InputStreamReader(((IFile) resource).getContents()));
       } catch (ScriptException e) {
-        e.printStackTrace();
+        reporter.error(e);
         UiHelpers.reportError(ResourcesPlugin.getWorkspace().getRoot(), 0, 0, "Script Error: " + e.getMessage());
       }
     } else {

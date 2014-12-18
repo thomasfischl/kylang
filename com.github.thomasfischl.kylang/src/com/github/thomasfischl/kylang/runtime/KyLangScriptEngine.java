@@ -32,7 +32,7 @@ public class KyLangScriptEngine extends AbstractScriptEngine {
   @Override
   public Object eval(Reader reader, ScriptContext context) throws ScriptException {
     KyLangRuntime runtime = KyLangRuntime.createRuntime();
-    if (reader != null) {
+    if (reporter != null) {
       runtime.setReporter(reporter);
     }
     runtime.loadLibrary(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("control-structure.kytest")));

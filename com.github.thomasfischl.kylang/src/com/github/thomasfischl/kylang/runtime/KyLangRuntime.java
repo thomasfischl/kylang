@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
@@ -15,11 +16,12 @@ import org.eclipse.xtext.parser.ParseException;
 import com.github.thomasfischl.kylang.runtime.keywords.IScriptedKeyword;
 import com.github.thomasfischl.kylang.runtime.keywords.KeywordResult;
 import com.github.thomasfischl.kylang.test.TestLangStandaloneSetupGenerated;
+import com.github.thomasfischl.kylang.test.testLang.Expr;
 import com.github.thomasfischl.kylang.test.testLang.KeywordCall;
 import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
 import com.github.thomasfischl.kylang.test.testLang.KeywordMetatype;
-import com.github.thomasfischl.kylang.test.testLang.KeywordScript;
 import com.github.thomasfischl.kylang.test.testLang.Model;
+import com.github.thomasfischl.kylang.test.testLang.PropertyDecl;
 import com.github.thomasfischl.kylang.test.testLang.ScriptType;
 import com.github.thomasfischl.kylang.test.testLang.TestLangFactory;
 import com.github.thomasfischl.kylang.util.TestLangModelUtils;
@@ -127,7 +129,7 @@ public class KyLangRuntime {
     reporter.reportKeywordBegin(keyword.getName());
 
     if (TestLangModelUtils.isScriptedKeyword(keyword)) {
-      executeScriptedKeyword(currScope, keyword.getScript());
+      executeScriptedKeyword(currScope, keyword);
       reporter.log("Execute scripted keyword");
     } else {
       // Execute a container keyword
@@ -137,14 +139,18 @@ public class KyLangRuntime {
     }
   }
 
-  private void executeScriptedKeyword(KyLangScriptScope currScope, KeywordScript script) {
-    if (ScriptType.JAVA == script.getScriptType()) {
-      String keywordClass = script.getClass_();
+  private void executeScriptedKeyword(KyLangScriptScope currScope, KeywordDecl keyword) {
+    if (keyword.getScript() == null) {
+      throw new KyLangScriptException("Keyword '" + keyword.getName() + "': Missing script configuraiton.");
+    }
+    if (ScriptType.JAVA == keyword.getScript().getScriptType()) {
+      String keywordClass = keyword.getScript().getClass_();
       try {
         Class<?> clazz = getClass().getClassLoader().loadClass(keywordClass);
-        if (clazz.isAssignableFrom(IScriptedKeyword.class)) {
+        if (IScriptedKeyword.class.isAssignableFrom(clazz)) {
           IScriptedKeyword scripedKeyword = (IScriptedKeyword) clazz.newInstance();
-          KeywordResult result = scripedKeyword.execute(currScope);
+
+          KeywordResult result = scripedKeyword.execute(currScope, reporter);
           if (!result.isSuccess()) {
             // TODO improve this implementation
             throw new IllegalStateException("Failed Keyword");
@@ -160,7 +166,7 @@ public class KyLangRuntime {
         throw new KyLangScriptException("An error occurs during creating the scripted keyword object. Message: " + e.getMessage());
       }
     } else {
-      throw new KyLangScriptException("Unkown script keyword type '" + script.getScriptType() + "'.");
+      throw new KyLangScriptException("Unkown script keyword type '" + keyword.getScript().getScriptType() + "'.");
     }
   }
 
@@ -176,11 +182,40 @@ public class KyLangRuntime {
     } else {
       KeywordDecl keywordImpl = getKeywordDefinition(keyword.getName());
       if (keywordImpl != null) {
-        stack.push(new KyLangScriptScope(currScope, keywordImpl));
+        KyLangScriptScope scope = createCallScope(keyword, currScope, keywordImpl);
+        stack.push(scope);
       } else {
         reporter.reportUnkownKeyword(keyword.getName());
       }
     }
+  }
+
+  private KyLangScriptScope createCallScope(KeywordCall keyword, KyLangScriptScope currScope, KeywordDecl keywordImpl) {
+    KyLangScriptScope scope = new KyLangScriptScope(currScope, keywordImpl);
+
+    EList<Expr> callParameters = new BasicEList<>();
+    EList<PropertyDecl> properties = new BasicEList<>();
+
+    if (keyword.getParameters() != null) {
+      callParameters = keyword.getParameters().getParameters();
+    }
+
+    if (keywordImpl.getProperties() != null) {
+      properties = keywordImpl.getProperties();
+    }
+
+    if (callParameters.size() == properties.size()) {
+      
+      //TODO check parameter type (in, out, inout)
+      for (int i = 0; i < callParameters.size(); i++) {
+        scope.addVariable(properties.get(i).getName(), "");
+      }
+
+    } else {
+      throw new KyLangScriptException("Invalid number of arguments for keyword '" + keyword.getName() + "'.");
+    }
+
+    return scope;
   }
 
   private KeywordDecl getKeywordDefinition(String keywordName) {

@@ -1,16 +1,20 @@
 package com.github.thomasfischl.kylang.runtime;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.github.thomasfischl.kylang.runtime.keywords.IKeywordScope;
 import com.github.thomasfischl.kylang.test.testLang.KeywordCall;
 import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
 
-class KyLangScriptScope implements IKeywordScope{
+class KyLangScriptScope implements IKeywordScope {
   private int curpos = 0;
   private final KeywordDecl keyword;
   private final List<KeywordCall> list;
   private final KyLangScriptScope parent;
+  private final Map<String, String> variables = new HashMap<>();
 
   public KyLangScriptScope(KyLangScriptScope parent, KeywordDecl keyword) {
     super();
@@ -50,5 +54,23 @@ class KyLangScriptScope implements IKeywordScope{
       throw new IllegalStateException("This method is only allowd for a keyword scope");
     }
     return curpos == 2;
+  }
+
+  @Override
+  public void addVariable(String name, String value) {
+    variables.put(name, value);
+  }
+
+  @Override
+  public String getVariable(String name) {
+    if (!variables.containsKey(name)) {
+      throw new KyLangScriptException("Variable '" + name + "' is not declared.");
+    }
+    return variables.get(name);
+  }
+  
+  @Override
+  public Set<String> getVariableNames(){
+    return variables.keySet();
   }
 }

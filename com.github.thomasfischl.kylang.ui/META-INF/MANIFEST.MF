@@ -7,8 +7,8 @@ Bundle-SymbolicName: com.github.thomasfischl.kylang.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.github.thomasfischl.kylang;visibility:=reexport,
  org.eclipse.xtext.ui,
- org.eclipse.ui.editors;bundle-version="3.5.0",
- org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
  org.eclipse.xtext.ui.shared,
  org.eclipse.ui,
  org.eclipse.xtext.builder,
@@ -16,7 +16,7 @@ Require-Bundle: com.github.thomasfischl.kylang;visibility:=reexport,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.compare,
- org.eclipse.ui.console;bundle-version="3.5.300"
+ org.eclipse.ui.console
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

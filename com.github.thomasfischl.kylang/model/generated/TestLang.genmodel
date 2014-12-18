@@ -4,7 +4,7 @@
     editorDirectory="/com.github.thomasfischl.kylang.editor/src" modelPluginID="com.github.thomasfischl.kylang"
     forceOverwrite="true" modelName="TestLang" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="5.0" copyrightFields="false" editPluginID="com.github.thomasfischl.kylang.edit"
-    editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.10">
+    editorPluginID="com.github.thomasfischl.kylang.editor" runtimeVersion="2.9">
   <genPackages prefix="TestLang" basePackage="com.github.thomasfischl.kylang.test"
       disposableProviderFactory="true" fileExtensions="kytest" ecorePackage="TestLang.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="TestLang.ecore#//KeywordMetatype">
@@ -51,7 +51,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Expr/expr"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//OrExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//OrExpr/exprs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//OrExpr/expr"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//OrExpr/opt"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//AndExpr">
@@ -63,13 +63,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//RelExpr/opt"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//SimpleExpr">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//SimpleExpr/preopt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//SimpleExpr/expr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//SimpleExpr/opt"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//Term">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//Term/expr"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//Term/opt"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//NotFact">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TestLang.ecore#//NotFact/opt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TestLang.ecore#//NotFact/expr"/>
     </genClasses>
     <genClasses ecoreClass="TestLang.ecore#//Fact">

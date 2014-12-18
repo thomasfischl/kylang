@@ -7,13 +7,13 @@ import javax.script.ScriptException;
 
 import org.junit.Test;
 
-public class KyLangScriptEngineScriptedKeywordTest {
+public class ExpressionTest {
 
   @Test
   public void scriptKeywordTest() throws ScriptException {
     KyLangScriptEngineFactory factory = new KyLangScriptEngineFactory();
     ScriptEngine engine = factory.getScriptEngine();
-    engine.eval(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("scriptKeywordTest.kytest")));
+    engine.eval(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("expression.kytest")));
   }
 
 }

@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.ParseException;
@@ -52,6 +53,9 @@ public class KyLangRuntime {
   public void loadLibrary(Reader reader) {
     IParseResult result = parser.parse(reader);
     if (result.hasSyntaxErrors()) {
+      for (INode error : result.getSyntaxErrors()) {
+        reporter.error(error.getSyntaxErrorMessage().toString());
+      }
       throw new ParseException("Provided input contains syntax errors.");
     }
 
@@ -241,9 +245,11 @@ public class KyLangRuntime {
 
     if (callParameters.size() == properties.size()) {
 
+      KyLangExpressionEvaluator exprEval = new KyLangExpressionEvaluator(currScope);
+
       // TODO check parameter type (in, out, inout)
       for (int i = 0; i < callParameters.size(); i++) {
-        scope.addVariable(properties.get(i).getName(), "");
+        scope.addVariable(properties.get(i).getName(), exprEval.eval(callParameters.get(i)));
       }
 
     } else {

@@ -4,10 +4,10 @@ import java.util.Set;
 
 public interface IKeywordScope {
 
-  String getVariable(String name);
+  Object getVariable(String name);
 
   Set<String> getVariableNames();
 
-  void addVariable(String name, String value);
+  void addVariable(String name, Object value);
 
 }

@@ -14,7 +14,7 @@ class KyLangScriptScope implements IKeywordScope {
   private final KeywordDecl keyword;
   private final List<KeywordCall> list;
   private final KyLangScriptScope parent;
-  private final Map<String, String> variables = new HashMap<>();
+  private final Map<String, Object> variables = new HashMap<>();
 
   public KyLangScriptScope(KyLangScriptScope parent, KeywordDecl keyword) {
     super();
@@ -57,20 +57,20 @@ class KyLangScriptScope implements IKeywordScope {
   }
 
   @Override
-  public void addVariable(String name, String value) {
+  public void addVariable(String name, Object value) {
     variables.put(name, value);
   }
 
   @Override
-  public String getVariable(String name) {
+  public Object getVariable(String name) {
     if (!variables.containsKey(name)) {
       throw new KyLangScriptException("Variable '" + name + "' is not declared.");
     }
     return variables.get(name);
   }
-  
+
   @Override
-  public Set<String> getVariableNames(){
+  public Set<String> getVariableNames() {
     return variables.keySet();
   }
 }

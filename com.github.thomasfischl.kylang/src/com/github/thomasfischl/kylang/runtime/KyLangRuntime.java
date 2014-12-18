@@ -12,11 +12,15 @@ import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.ParseException;
 
+import com.github.thomasfischl.kylang.runtime.keywords.IScriptedKeyword;
+import com.github.thomasfischl.kylang.runtime.keywords.KeywordResult;
 import com.github.thomasfischl.kylang.test.TestLangStandaloneSetupGenerated;
 import com.github.thomasfischl.kylang.test.testLang.KeywordCall;
 import com.github.thomasfischl.kylang.test.testLang.KeywordDecl;
 import com.github.thomasfischl.kylang.test.testLang.KeywordMetatype;
+import com.github.thomasfischl.kylang.test.testLang.KeywordScript;
 import com.github.thomasfischl.kylang.test.testLang.Model;
+import com.github.thomasfischl.kylang.test.testLang.ScriptType;
 import com.github.thomasfischl.kylang.test.testLang.TestLangFactory;
 import com.github.thomasfischl.kylang.util.TestLangModelUtils;
 import com.google.common.base.Joiner;
@@ -33,7 +37,7 @@ public class KyLangRuntime {
 
   private Map<String, KeywordDecl> definedKeywords = new HashMap<>();
 
-  private Stack<Scope> stack = new Stack<>();
+  private Stack<KyLangScriptScope> stack = new Stack<>();
 
   protected KyLangRuntime() {
     reporter = new KyLangReporter();
@@ -70,22 +74,22 @@ public class KyLangRuntime {
         reporter.log("----------------------------------------------------------------");
         reporter.log("Execute Testcase '" + keyword.getName() + "'");
         reporter.log("----------------------------------------------------------------");
-        execute(keyword.getName());
+        executeTestCase(keyword.getName());
         reporter.log("----------------------------------------------------------------");
       }
     }
   }
 
-  private void execute(String keywordName) {
+  private void executeTestCase(String keywordName) {
     stack.clear();
 
     // create initial scope
     KeywordCall keywordCall = TestLangFactory.eINSTANCE.createKeywordCall();
     keywordCall.setName(keywordName);
-    stack.push(new Scope(null, Lists.newArrayList(keywordCall)));
+    stack.push(new KyLangScriptScope(null, Lists.newArrayList(keywordCall)));
 
     Object currKeyword = null;
-    Scope currScope = null;
+    KyLangScriptScope currScope = null;
     while (!stack.isEmpty()) {
 
       currScope = stack.peek();
@@ -115,26 +119,52 @@ public class KyLangRuntime {
     }
   }
 
-  private void executeKeywordDeclEnd(KeywordDecl keyword, Scope currScope) {
+  private void executeKeywordDeclEnd(KeywordDecl keyword, KyLangScriptScope currScope) {
     reporter.reportKeywordEnd(keyword.getName());
   }
 
-  private void executeKeywordDeclBegin(KeywordDecl keyword, Scope currScope) {
+  private void executeKeywordDeclBegin(KeywordDecl keyword, KyLangScriptScope currScope) {
     reporter.reportKeywordBegin(keyword.getName());
 
     if (TestLangModelUtils.isScriptedKeyword(keyword)) {
-      // Execute a scripted keyword
-      // TODO implement me
+      executeScriptedKeyword(currScope, keyword.getScript());
       reporter.log("Execute scripted keyword");
     } else {
       // Execute a container keyword
       if (keyword.getKeywordlist() != null) {
-        stack.push(new Scope(currScope, keyword.getKeywordlist().getChildren()));
+        stack.push(new KyLangScriptScope(currScope, keyword.getKeywordlist().getChildren()));
       }
     }
   }
 
-  private void executeKeywordCall(KeywordCall keyword, Scope currScope) {
+  private void executeScriptedKeyword(KyLangScriptScope currScope, KeywordScript script) {
+    if (ScriptType.JAVA == script.getScriptType()) {
+      String keywordClass = script.getClass_();
+      try {
+        Class<?> clazz = getClass().getClassLoader().loadClass(keywordClass);
+        if (clazz.isAssignableFrom(IScriptedKeyword.class)) {
+          IScriptedKeyword scripedKeyword = (IScriptedKeyword) clazz.newInstance();
+          KeywordResult result = scripedKeyword.execute(currScope);
+          if (!result.isSuccess()) {
+            // TODO improve this implementation
+            throw new IllegalStateException("Failed Keyword");
+          }
+        } else {
+          throw new KyLangScriptException("Class '" + clazz.getSimpleName() + "' does not implement the IScriptedKeyword.");
+        }
+      } catch (ClassNotFoundException e) {
+        reporter.error(e);
+        throw new KyLangScriptException("Keyword class '" + keywordClass + "' can't be found.");
+      } catch (InstantiationException | IllegalAccessException e) {
+        reporter.error(e);
+        throw new KyLangScriptException("An error occurs during creating the scripted keyword object. Message: " + e.getMessage());
+      }
+    } else {
+      throw new KyLangScriptException("Unkown script keyword type '" + script.getScriptType() + "'.");
+    }
+  }
+
+  private void executeKeywordCall(KeywordCall keyword, KyLangScriptScope currScope) {
     if (TestLangModelUtils.isInlineKeyword(keyword)) {
       // Execute the keyword as inline keyword
       // Create a temporary keyword implementation for the inline keyword and push it on the execution stack
@@ -142,11 +172,11 @@ public class KyLangRuntime {
       keywordImpl.setName(keyword.getName());
       keywordImpl.setMetatype(KeywordMetatype.USERDEFINED);
       keywordImpl.setKeywordlist(keyword.getKeywordList().getKeywordlist());
-      stack.push(new Scope(currScope, keywordImpl));
+      stack.push(new KyLangScriptScope(currScope, keywordImpl));
     } else {
       KeywordDecl keywordImpl = getKeywordDefinition(keyword.getName());
       if (keywordImpl != null) {
-        stack.push(new Scope(currScope, keywordImpl));
+        stack.push(new KyLangScriptScope(currScope, keywordImpl));
       } else {
         reporter.reportUnkownKeyword(keyword.getName());
       }
@@ -160,52 +190,5 @@ public class KyLangRuntime {
   public static KyLangRuntime createRuntime() {
     Injector injector = new TestLangStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
     return injector.getInstance(KyLangRuntime.class);
-  }
-}
-
-class Scope {
-  private int curpos = 0;
-  private final KeywordDecl keyword;
-  private final List<KeywordCall> list;
-  private final Scope parent;
-
-  public Scope(Scope parent, KeywordDecl keyword) {
-    super();
-    this.parent = parent;
-    this.keyword = keyword;
-    list = null;
-  }
-
-  public Scope(Scope parent, List<KeywordCall> list) {
-    super();
-    this.parent = parent;
-    this.list = list;
-    keyword = null;
-  }
-
-  Object getNextOpt() {
-    if (keyword != null && curpos < 2) {
-      curpos++;
-      return keyword;
-    }
-    if (list != null && curpos < list.size()) {
-      return list.get(curpos++);
-    }
-    return null;
-  }
-
-  boolean isKeywordBegin() {
-    if (keyword == null) {
-      throw new IllegalStateException("This method is only allowd for a keyword scope");
-    }
-
-    return curpos == 1;
-  }
-
-  boolean isKeywordEnd() {
-    if (keyword == null) {
-      throw new IllegalStateException("This method is only allowd for a keyword scope");
-    }
-    return curpos == 2;
   }
 }

@@ -17,9 +17,18 @@ public class KyLangReporter {
   public void reportUnkownKeyword(String name) {
     report("??? unkown keyword: " + name);
   }
-  
-  public void log(String msg){
+
+  public void log(String msg) {
     report(msg);
+  }
+
+  public void error(String msg) {
+    report(msg);
+  }
+
+  public void error(Throwable e) {
+    // TODO improve this implementation
+    e.printStackTrace();
   }
 
   protected void report(String msg) {

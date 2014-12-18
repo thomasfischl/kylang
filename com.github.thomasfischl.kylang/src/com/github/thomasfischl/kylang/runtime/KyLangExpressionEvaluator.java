@@ -242,6 +242,10 @@ public class KyLangExpressionEvaluator {
       return scope.getVariable(expr.getIdent());
     } else if (expr.getExpr() != null) {
       return eval(expr.getExpr());
+    } else if (expr.getLocator() != null) {
+      return new KyLangExpressionLocator(expr.getLocator());
+    } else if (expr.getSymbol() != null) {
+      return new KyLangExpressionSymbol(expr.getSymbol());
     } else {
       return expr.getNumber();
     }

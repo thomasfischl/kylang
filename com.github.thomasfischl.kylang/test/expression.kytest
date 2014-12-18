@@ -29,6 +29,10 @@ keyword<testcase> ExprTest1{
 	
 	Print((1 != 1) + " = false")
 	Print((1 != 2) + " = true")
+	
+	//Special
+	Print(:index)
+	Print(@website.orf.articles.1)
 }
 
 keyword<scripted> Print{

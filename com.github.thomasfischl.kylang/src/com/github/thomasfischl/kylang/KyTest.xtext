@@ -81,11 +81,13 @@ NotFact:
 ;
 
 Fact:
-	bool='false'  | 
-	bool='true'   | 
-	number=NUMBER | 
-	string=STRING | 
-	ident =IDEXT  |
+	bool='false'          | 
+	bool='true'           | 
+	number=NUMBER         | 
+	string=STRING         | 
+	ident =IDEXT          |
+	locator=IDEXT_LOCATOR |
+	symbol=IDEXT_SYMBOL   |
 	'(' expr=Expr ')'
 ;
 
@@ -126,6 +128,10 @@ enum ScriptType:
 //
 //terminal ANY_OTHER: .;
 
+terminal fragment ID_CHARS:
+	'a'..'z' | 'A'..'Z' | '0'..'9'
+;
+
 terminal fragment IDEXT_CHARS:
 	'a'..'z' | 'A'..'Z' | '0'..'9' | '$' | "'"
 ;
@@ -144,6 +150,16 @@ terminal IDEXT:
 		IDEXT_IDENTIFIER
 	) ('_')? 
 ;
+
+terminal IDEXT_SYMBOL:
+	':' ('a'..'z') ID_CHARS*
+;
+
+terminal IDEXT_LOCATOR:
+	'@' (ID_CHARS | '.' )*
+;
+
+
 
 terminal STRING	: 
 	'"' ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|'"') )* '"'

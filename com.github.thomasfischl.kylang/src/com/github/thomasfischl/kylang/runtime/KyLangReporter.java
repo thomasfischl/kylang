@@ -31,6 +31,14 @@ public class KyLangReporter {
     e.printStackTrace();
   }
 
+  public void reportTestCaseStart(String keywordName) {
+    // Nothing to do
+  }
+
+  public void reportTestCaseEnd(String keywordName) {
+    indentation = 0;
+  }
+
   protected void report(String msg) {
     System.out.println(formatMessae(msg));
   }

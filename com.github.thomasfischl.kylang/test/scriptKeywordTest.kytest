@@ -5,6 +5,11 @@ keyword<testcase> A User wants to create a new SC Test{
 	Open Browser
 }
 
+keyword<testcase> Unimplemented Keyword Test{
+	Unimplemented Keyword
+}
+
+
 keyword<userdefined> Login on the Webapplication with user{
 	property property1
 	property property2
@@ -26,4 +31,8 @@ keyword<scripted> Create new SC Project {
 	property property1
 
 	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.TestKeyword"
+}
+
+keyword<scripted> Unimplemented Keyword {
+	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.UnimplementedKeyword"
 }

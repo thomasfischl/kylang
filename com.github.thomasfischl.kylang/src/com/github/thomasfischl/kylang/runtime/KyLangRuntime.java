@@ -37,9 +37,9 @@ public class KyLangRuntime {
 
   private KyLangReporter reporter;
 
-  private Map<String, KeywordDecl> definedKeywords = new HashMap<>();
+  private final Map<String, KeywordDecl> definedKeywords = new HashMap<>();
 
-  private Stack<KyLangScriptScope> stack = new Stack<>();
+  private final Stack<KyLangScriptScope> stack = new Stack<>();
 
   protected KyLangRuntime() {
     reporter = new KyLangReporter();
@@ -71,53 +71,89 @@ public class KyLangRuntime {
   }
 
   public void executeAllTestcases() {
+
+    int successTests = 0;
+    int failedTests = 0;
+    int errorTests = 0;
+
     for (KeywordDecl keyword : definedKeywords.values()) {
       if (TestLangModelUtils.isTestcaseKeyword(keyword)) {
-        reporter.log("----------------------------------------------------------------");
-        reporter.log("Execute Testcase '" + keyword.getName() + "'");
-        reporter.log("----------------------------------------------------------------");
-        executeTestCase(keyword.getName());
-        reporter.log("----------------------------------------------------------------");
+        try {
+          reporter.log("----------------------------------------------------------------");
+          reporter.log("Execute Testcase '" + keyword.getName() + "'");
+          reporter.log("----------------------------------------------------------------");
+          executeTestCase(keyword.getName());
+          successTests++;
+        } catch (KyLangScriptException e) {
+          e.printStackTrace();
+          errorTests++;
+          reporter.error(e.getMessage());
+        } catch (KyLangScriptFailedException e) {
+          e.printStackTrace();
+          failedTests++;
+          reporter.error(e.getMessage());
+        } catch (Exception e) {
+          e.printStackTrace();
+          errorTests++;
+          reporter.error(e.getMessage());
+        } finally {
+          reporter.log("----------------------------------------------------------------");
+        }
       }
+    }
+
+    reporter.log("  Results:");
+    reporter.log("  Success Tests     : " + successTests);
+    reporter.log("  Failed Tests      : " + failedTests);
+    reporter.log("  Fatal Failed Tests: " + errorTests);
+    reporter.log("----------------------------------------------------------------");
+
+    if (errorTests > 0) {
+      throw new IllegalStateException("Fatal failed tests!");
     }
   }
 
   private void executeTestCase(String keywordName) {
     stack.clear();
 
-    // create initial scope
-    KeywordCall keywordCall = TestLangFactory.eINSTANCE.createKeywordCall();
-    keywordCall.setName(keywordName);
-    stack.push(new KyLangScriptScope(null, Lists.newArrayList(keywordCall)));
+    try {
+      reporter.reportTestCaseStart(keywordName);
+      // create initial scope
+      KeywordCall keywordCall = TestLangFactory.eINSTANCE.createKeywordCall();
+      keywordCall.setName(keywordName);
+      stack.push(new KyLangScriptScope(null, Lists.newArrayList(keywordCall)));
 
-    Object currKeyword = null;
-    KyLangScriptScope currScope = null;
-    while (!stack.isEmpty()) {
+      Object currKeyword = null;
+      KyLangScriptScope currScope = null;
+      while (!stack.isEmpty()) {
 
-      currScope = stack.peek();
-      currKeyword = currScope.getNextOpt();
-      if (currKeyword == null) {
-        stack.pop();
-        continue;
-      }
+        currScope = stack.peek();
+        currKeyword = currScope.getNextOpt();
+        if (currKeyword == null) {
+          stack.pop();
+          continue;
+        }
 
-      if (currKeyword instanceof KeywordCall) {
-        KeywordCall keyword = (KeywordCall) currKeyword;
-        executeKeywordCall(keyword, currScope);
-      }
+        if (currKeyword instanceof KeywordCall) {
+          KeywordCall keyword = (KeywordCall) currKeyword;
+          executeKeywordCall(keyword, currScope);
+        }
 
-      if (currKeyword instanceof KeywordDecl) {
-        KeywordDecl keyword = (KeywordDecl) currKeyword;
+        if (currKeyword instanceof KeywordDecl) {
+          KeywordDecl keyword = (KeywordDecl) currKeyword;
 
-        if (currScope.isKeywordBegin()) {
-          executeKeywordDeclBegin(keyword, currScope);
-        } else if (currScope.isKeywordEnd()) {
-          executeKeywordDeclEnd(keyword, currScope);
-        } else {
-          // TODO invalid state
-          throw new IllegalStateException("The runtime has an invalid state.");
+          if (currScope.isKeywordBegin()) {
+            executeKeywordDeclBegin(keyword, currScope);
+          } else if (currScope.isKeywordEnd()) {
+            executeKeywordDeclEnd(keyword, currScope);
+          } else {
+            // TODO invalid state
+            throw new IllegalStateException("The runtime has an invalid state.");
+          }
         }
       }
+    } finally {
+      reporter.reportTestCaseEnd(keywordName);
     }
   }
 
@@ -130,7 +166,6 @@ public class KyLangRuntime {
 
     if (TestLangModelUtils.isScriptedKeyword(keyword)) {
       executeScriptedKeyword(currScope, keyword);
-      reporter.log("Execute scripted keyword");
     } else {
       // Execute a container keyword
       if (keyword.getKeywordlist() != null) {
@@ -150,10 +185,10 @@ public class KyLangRuntime {
         if (IScriptedKeyword.class.isAssignableFrom(clazz)) {
           IScriptedKeyword scripedKeyword = (IScriptedKeyword) clazz.newInstance();
 
-          KeywordResult result = scripedKeyword.execute(currScope, reporter);
+          KeywordResult result = scripedKeyword.execute(keyword.getName(), currScope, reporter);
           if (!result.isSuccess()) {
             // TODO improve this implementation
-            throw new IllegalStateException("Failed Keyword");
+            throw new KyLangScriptFailedException("Failed Keyword");
           }
         } else {
           throw new KyLangScriptException("Class '" + clazz.getSimpleName() + "' does not implement the IScriptedKeyword.");
@@ -205,8 +240,8 @@ public class KyLangRuntime {
     }
 
     if (callParameters.size() == properties.size()) {
-      
-      //TODO check parameter type (in, out, inout)
+
+      // TODO check parameter type (in, out, inout)
       for (int i = 0; i < callParameters.size(); i++) {
         scope.addVariable(properties.get(i).getName(), "");
       }

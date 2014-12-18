@@ -35,7 +35,24 @@ keyword<testcase> ExprTest1{
 	Print(@website.orf.articles.1)
 }
 
+keyword<testcase> ExprTest2{
+	Assert(1 == 1)
+}
+
+keyword<testcase> ExprTest3{
+	Assert(1 != 2)
+}
+
+keyword<testcase> ExprTest4{
+	Assert(1 + 1 == 2)
+}
+
 keyword<scripted> Print{
 	property text
 	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.PrintKeyword"
+}
+
+keyword<scripted> Assert{
+	property assert
+	implement as java => "com.github.thomasfischl.kylang.runtime.keywords.impl.AssertKeyword"
 }

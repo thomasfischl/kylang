@@ -70,6 +70,16 @@ class KyLangScriptScope implements IKeywordScope {
   }
 
   @Override
+  public boolean getVariableAsBoolean(String name) {
+    Object value = getVariable(name);
+    if (value instanceof Boolean) {
+      return (boolean) value;
+    } else {
+      throw new KyLangScriptException("Variable '" + name + "' is not from type 'boolean'.");
+    }
+  }
+
+  @Override
   public Set<String> getVariableNames() {
     return variables.keySet();
   }
